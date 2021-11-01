@@ -3,12 +3,16 @@
 
 ## Overview
 
-In this folder are two solutions `CanWeFixIt` and `YesWeCan`. The general idea is
-that you update the `CanWeFixIt` solution so that it conforms to the 
-requirements as stated in this document below.
+In this repository are two solutions `CanWeFixIt` and `YesWeCan`. The general
+idea is that you update the `CanWeFixIt` solution so that it conforms to the 
+requirements as stated in this document.
+
+[Fork](https://guides.github.com/activities/forking/) this repository on Github,
+work on your solution and then provide the link to your fork to your AlphaCert
+contact. 
 
 The `YesWeCan` solution contains a console application that will call the 
-`CanWeFixItApi`, an ASP.NET API, and check the various endpoints for expected
+`CanWeFixItApi`, an `ASP.NET` API, and check the various endpoints for expected
 behaviours.
 
 The simplest way to achieve this is to just run them both at the same time 
