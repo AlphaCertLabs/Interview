@@ -59,8 +59,8 @@ and only partial features.
 
 Fix as much as possible and implement features according to the requirements.
 
-You may refactor anything in the `CanWeFixIt` projects, even including completing 
-deleting them and starting from scratch with any (appropriately licensed)
+You may refactor anything in the `CanWeFixIt` projects, including completely 
+deleting and replacing them. You may use and consume any appropriately licensed
 third party libraries you are comfortable with. If you do go this route, make
 note of the url and port that is expected in the console tester application 
 (`http://localhost:5010`).
