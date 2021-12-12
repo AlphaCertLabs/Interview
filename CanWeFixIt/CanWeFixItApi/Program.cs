@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using System.IO;
 
-namespace CanWeFixItApi
+namespace CanWeFixIt.Api
 {
     public class Program
     {
@@ -14,8 +16,15 @@ namespace CanWeFixItApi
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
-                    webBuilder.UseUrls("http://localhost:5010");
+                    var appSettings = new ConfigurationBuilder()
+                        .SetBasePath(Directory.GetCurrentDirectory())
+                        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                        .AddJsonFile("appsettings.development.json", optional: false, reloadOnChange: true)
+                        .Build();
+
+                    webBuilder
+                        .UseConfiguration(appSettings)
+                        .UseStartup<Startup>();
                 });
     }
 }

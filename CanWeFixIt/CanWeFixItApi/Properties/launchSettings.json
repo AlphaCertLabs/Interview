@@ -5,7 +5,7 @@
     "anonymousAuthentication": true
   },
   "profiles": {
-    "CanWeFixItApi": {
+    "CanWeFixIt.Api": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": false,

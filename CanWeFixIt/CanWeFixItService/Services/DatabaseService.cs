@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using CanWeFixIt.Data.Models;
 using Dapper;
 using Microsoft.Data.Sqlite;
 
-namespace CanWeFixItService
+namespace CanWeFixIt.Data.Services
 {
     public class DatabaseService : IDatabaseService
     {
@@ -23,14 +24,31 @@ namespace CanWeFixItService
             _connection.Open();
         }
         
-        public IEnumerable<Instrument> Instruments()
+        public async Task<IEnumerable<Instrument>> GetInstrumentsAsync(bool? active = null)
         {
-            return _connection.QueryAsync<Instrument>("SQL GOES HERE");
+            var query = "SELECT * FROM Instrument";
+            if (active != null)
+                query += $" WHERE Active = {active}";
+
+            return await _connection.QueryAsync<Instrument>(query);
         }
 
-        public async Task<IEnumerable<MarketData>> MarketData()
+        public async Task<IEnumerable<Instrument>> GetInstrumentsBySedolAsync(string sedol, bool? active = null)
         {
-            return await _connection.QueryAsync<MarketData>("SELECT Id, DataValue FROM MarketData WHERE Active = 0");
+            var query = $"SELECT * FROM Instrument WHERE Sedol = '{sedol}'";
+            if (active != null)
+                query += $" WHERE Active = {active}";
+
+            return await _connection.QueryAsync<Instrument>(query);
+        }
+
+        public async Task<IEnumerable<MarketData>> GetMarketDataAsync(bool? active = null)
+        {
+            var query = "SELECT * FROM MarketData";
+            if (active != null)
+                query += $" WHERE Active = {active}";
+
+            return await _connection.QueryAsync<MarketData>(query);
         }
 
         /// <summary>

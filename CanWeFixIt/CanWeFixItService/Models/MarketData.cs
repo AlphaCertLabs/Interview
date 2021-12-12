@@ -1,4 +1,4 @@
-namespace CanWeFixItService
+namespace CanWeFixIt.Data.Models
 {
     public class MarketData
     {
