@@ -9,4 +9,16 @@
       <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.11" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="Models\" />
+      <None Remove="Services\" />
+      <None Remove="Services\Interfaces\" />
+      <None Remove="Models\DTOs\" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Models\" />
+      <Folder Include="Services\" />
+      <Folder Include="Services\Interfaces\" />
+      <Folder Include="Models\DTOs\" />
+    </ItemGroup>
 </Project>
