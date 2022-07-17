@@ -1,15 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using CanWeFixItService.Models;
+using CanWeFixItService.Models.DTOs;
+using CanWeFixItService.Services.Interfaces;
 using Dapper;
 using Microsoft.Data.Sqlite;
 
-namespace CanWeFixItService
+namespace CanWeFixItService.Services
 {
     public class DatabaseService : IDatabaseService
     {
         // See SQLite In-Memory example:
         // https://github.com/dotnet/docs/blob/main/samples/snippets/standard/data/sqlite/InMemorySample/Program.cs
-        
+
         // Using a name and a shared cache allows multiple connections to access the same
         // in-memory database
         const string connectionString = "Data Source=DatabaseService;Mode=Memory;Cache=Shared";
@@ -22,15 +25,31 @@ namespace CanWeFixItService
             _connection = new SqliteConnection(connectionString);
             _connection.Open();
         }
-        
-        public IEnumerable<Instrument> Instruments()
+
+        public async Task<IEnumerable<Instrument>> GetInstruments()
         {
-            return _connection.QueryAsync<Instrument>("SQL GOES HERE");
+            return await _connection.QueryAsync<Instrument>("SELECT * " +
+                                                            "FROM instrument " +
+                                                            "WHERE active = 1"
+                                                            );
         }
 
-        public async Task<IEnumerable<MarketData>> MarketData()
+        public async Task<IEnumerable<MarketDataDto>> GetMarketData()
         {
-            return await _connection.QueryAsync<MarketData>("SELECT Id, DataValue FROM MarketData WHERE Active = 0");
+            return await _connection.QueryAsync<MarketDataDto>("SELECT m.Id, m.datavalue, i.Id as InstrumentId, m.active " +
+                                                               "FROM marketdata AS m " +
+                                                               "INNER JOIN instrument AS i " +
+                                                               "ON m.Sedol = i.Sedol " +
+                                                               "WHERE m.active = 1"
+                                                               );
+        }
+
+        public async Task<IEnumerable<MarketValuation>> GetValuations()
+        {
+            return await _connection.QueryAsync<MarketValuation>("SELECT SUM(datavalue) AS Total " +
+                                                                 "FROM marketdata " +
+                                                                 "WHERE active = 1"
+                                                                 ); ;
         }
 
         /// <summary>
@@ -59,7 +78,7 @@ namespace CanWeFixItService
                        (9, 'Sedol9', 'Name9', 0)";
 
             _connection.Execute(createInstruments);
-            
+
             const string createMarketData = @"
                 CREATE TABLE marketdata
                 (
