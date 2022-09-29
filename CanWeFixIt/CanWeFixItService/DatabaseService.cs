@@ -22,7 +22,15 @@ namespace CanWeFixItService
             _connection = new SqliteConnection(connectionString);
             _connection.Open();
         }
-        
+
+        public DatabaseService(string connectionString)
+        {
+            // The in-memory database only persists while a connection is open to it. To manage
+            // its lifetime, keep one open connection around for as long as you need it.
+            _connection = new SqliteConnection(connectionString);
+            _connection.Open();
+        }
+
         public async Task<IEnumerable<Instrument>> Instruments()
         {
             return await _connection.QueryAsync<Instrument>("SELECT * FROM instrument WHERE active = 1");
