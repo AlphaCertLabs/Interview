@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using CanWeFixItService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CanWeFixItApi.Controllers
