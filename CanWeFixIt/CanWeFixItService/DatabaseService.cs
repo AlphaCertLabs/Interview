@@ -25,12 +25,17 @@ namespace CanWeFixItService
         
         public async Task<IEnumerable<Instrument>> Instruments()
         {
-            return await _connection.QueryAsync<Instrument>("SQL GOES HERE");
+            return await _connection.QueryAsync<Instrument>("SELECT * FROM instrument WHERE active = 1");
         }
 
-        public async Task<IEnumerable<MarketData>> MarketData()
+        public async Task<IEnumerable<MarketDataDto>> MarketData()
         {
-            return await _connection.QueryAsync<MarketData>("SELECT Id, DataValue FROM MarketData WHERE Active = 0");
+            return await _connection.QueryAsync<MarketDataDto>("SELECT md.Id, md.datavalue, i.Id as InstrumentId, md.active FROM marketdata md INNER JOIN instrument i ON i.Sedol = md.Sedol WHERE md.active = 1");
+        }
+
+        public async Task<IEnumerable<MarketValuation>> MarketValuation()
+        {
+            return await _connection.QueryAsync<MarketValuation>("SELECT SUM(datavalue) AS Total FROM marketdata WHERE active = 1");
         }
 
         /// <summary>
