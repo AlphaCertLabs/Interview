@@ -1,26 +1,3 @@
-# AlphaCert Technical Screening
-# Candidate
-
-## Overview
-
-In this repository are two solutions `CanWeFixIt` and `YesWeCan`. The general
-idea is that you update the `CanWeFixIt` solution so that it conforms to the 
-requirements as stated in this document.
-
-[Fork](https://guides.github.com/activities/forking/) this repository on Github,
-work on your solution and then provide the link to your fork to your AlphaCert
-contact. 
-
-The `YesWeCan` solution contains a console application that will call the 
-`CanWeFixItApi`, an `ASP.NET` API, and check the various endpoints for expected
-behaviours.
-
-The simplest way to achieve this is to just run them both at the same time 
-using your preferred development tooling (Visual Studio, Rider, dotnet cli). 
-Ensure the api project is up and then run the console application.
-
-The projects target `net5.0` so ensure you have the .NET 5 SDK installed.
-
 If the api returns the correct payloads at the appropriate endpoints then you
 will see console output with passed tests:
 
