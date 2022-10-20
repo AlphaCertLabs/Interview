@@ -2,7 +2,6 @@ using CanWeFixIt.Api.Data;
 using CanWeFixItService;
 using CanWeFixItService.Models;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -83,14 +82,16 @@ app.MapGet("/v1/marketdata", async (ICanWeFixItRepository repository) =>
     // mapping is done here since DTO is a "view-model" and doesn't belong in the repository
     // for more complex queries, it could be improved for performance
     // for more complex mappings, use AutoMapper
-    var dto = marketData.Select(md => new MarketDataDto
-    {
-        Id = md.Id,
-        DataValue = md.DataValue,
-        InstrumentId = instruments.SingleOrDefault(i => i.Sedol == md.Sedol)?.Id ?? 0,
-        Active = md.Active
-    })
-    .ToList();
+    var dto = marketData
+        .Where(md => instruments.Any(i => i.Sedol == md.Sedol))
+        .Select(md => new MarketDataDto
+        {
+            Id = md.Id,
+            DataValue = md.DataValue,
+            InstrumentId = instruments.Single(i => i.Sedol == md.Sedol).Id,
+            Active = md.Active
+        })
+        .ToList();
 
     return dto;
 });
