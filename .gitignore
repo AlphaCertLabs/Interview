@@ -354,3 +354,4 @@ MigrationBackup/
 
 # Sqlite DB files
 *.sqlite
+*.db

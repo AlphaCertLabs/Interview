@@ -1,3 +1,18 @@
+# Refactoring
+* Forked the project and created a develop branch as the working branch
+* Upgraded to .NET 6 for long term support and updated NuGet packages
+* Consolidated CanWeFixIt projects into one solution since it is simple
+* Changed the DatabaseService to a repository so that it is abstracted; some other data source could be used later
+* Removed SetupDatabase from the interface as this is implementation specific; there may not be a database
+* Added integration tests
+* Converted to use EF because I like Code First!
+* Change get data active to true; don't we want only active items?
+
+# TODO
+
+# Acknowledgements
+
+
 # AlphaCert Technical Screening
 # Candidate
 
