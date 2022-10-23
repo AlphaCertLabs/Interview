@@ -5,8 +5,12 @@
 * Changed the DatabaseService to a repository so that it is abstracted; some other data source could be used later
 * Removed SetupDatabase from the interface as this is implementation specific; there may not be a database
 * Added integration tests
-* Converted to use EF because I like Code First!
+* Converted to use EF
 * Change get data active to true; don't we want only active items?
+
+# Decisions
+* Choosing EF to shocase code first skills
+* Choosing integration tests over unit tests for end-to-end testing
 
 # TODO
 

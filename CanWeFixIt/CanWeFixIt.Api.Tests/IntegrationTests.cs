@@ -1,3 +1,4 @@
+using CanWeFixIt.Api.Data;
 using CanWeFixIt.Api.Tests;
 using CanWeFixItService.Models;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +13,7 @@ public class IntegrationTests
 
     public IntegrationTests()
     {
-        var webAppFactory = new WebApplicationFactory<global::Program>();
+        var webAppFactory = new CanWeFixItWebApplicationFactory();
         _httpClient = webAppFactory.CreateDefaultClient();
     }
 
@@ -20,7 +21,7 @@ public class IntegrationTests
     public async Task Initialize()
     {
         using var context = TestHelper.GetCanWeFixItDbContext();
-
+        context.CreateDbIfNotExists();
         // TODO: convert to in-memory
         // all tests assume an empty database
         await context.Database.ExecuteSqlRawAsync("DELETE FROM Instruments");

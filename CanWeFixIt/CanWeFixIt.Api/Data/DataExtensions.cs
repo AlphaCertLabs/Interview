@@ -11,6 +11,12 @@ namespace CanWeFixIt.Api.Data
 
             var services = scope.ServiceProvider;
             var context = services.GetRequiredService<CanWeFixItDbContext>();
+
+            context.CreateDbIfNotExists();
+        }
+
+        public static void CreateDbIfNotExists(this CanWeFixItDbContext context)
+        {
             context.Database.EnsureCreated();
             DbInitializer.Initialize(context);
         }

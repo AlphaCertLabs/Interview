@@ -2,11 +2,11 @@ using CanWeFixIt.Api.Data;
 using CanWeFixItService;
 using CanWeFixItService.Models;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +19,14 @@ IConfiguration configuration = new ConfigurationBuilder()
 // if using Azure Application Insights, add connection string to config
 //builder.Services.AddApplicationInsightsTelemetry();
 
-builder.Services.AddSqlite<CanWeFixItDbContext>(configuration.GetConnectionString("CanWeFixItDbContext"));
+var connectionString = configuration.GetConnectionString("CanWeFixItDbContext");
+
+// never do this in production
+// https://stackoverflow.com/questions/56319638/entityframeworkcore-sqlite-in-memory-db-tables-are-not-created
+var keepAliveConnection = new SqliteConnection(connectionString);
+keepAliveConnection.Open();
+
+builder.Services.AddSqlite<CanWeFixItDbContext>(connectionString);
 builder.Services.AddScoped<ICanWeFixItRepository, CanWeFixItRepository>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -44,7 +51,7 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 
-    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    //var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     //options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
