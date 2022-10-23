@@ -25,4 +25,31 @@ public class CanWeFixItRepository : ICanWeFixItRepository
             .Where(md => md.Active)
             .AsNoTracking()
             .ToListAsync();
+
+    public async Task<IEnumerable<MarketDataDto>> GetMarketDataDtosAsync()
+    {
+        var instruments = await GetInstrumentsAsync();
+        var marketData = await GetMarketDataAsync();
+
+        // for more complex queries, this could be improved for performance
+        // for more complex mappings, use AutoMapper
+        var dto = marketData
+            .Where(md => instruments.Any(i => i.Sedol == md.Sedol))
+            .Select(md => new MarketDataDto
+            {
+                Id = md.Id,
+                DataValue = md.DataValue,
+                InstrumentId = instruments.Single(i => i.Sedol == md.Sedol).Id,
+                Active = md.Active
+            })
+            .ToList();
+
+        return dto;
+    }
+
+    public async Task<MarketValuation> GetMarketValuationAsync() =>
+        new MarketValuation
+        {
+            Total = (await GetMarketDataDtosAsync()).Sum(dto => dto.DataValue).GetValueOrDefault()
+        };
 }

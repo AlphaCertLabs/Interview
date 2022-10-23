@@ -1,7 +1,8 @@
 using CanWeFixIt.Api.Data;
 using CanWeFixIt.Api.Tests;
 using CanWeFixItService.Models;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using System.Net;
 using System.Net.Http.Json;
 
 namespace CanWeFixIt.Tests;
@@ -18,45 +19,86 @@ public class IntegrationTests
     }
 
     [TestInitialize]
-    public async Task Initialize()
+    public void Initialize()
     {
+        // all tests assume starting with the same seed data
         using var context = TestHelper.GetCanWeFixItDbContext();
         context.CreateDbIfNotExists();
-        // TODO: convert to in-memory
-        // all tests assume an empty database
-        await context.Database.ExecuteSqlRawAsync("DELETE FROM Instruments");
-        await context.Database.ExecuteSqlRawAsync("DELETE FROM MarketData");
     }
 
     [TestMethod]
-    public async Task CanWeFixIt_GetInstruments_ReturnsOK()
+    public async Task CanWeFixIt_GetInstruments_ReturnsOKWithActiveInstruments()
     {
         // arrange
-        var instruments = new Instrument[]
-        {
-            new Instrument { Id = 1, Sedol = "Sedol1", Name = "Name1", Active = false },
-            new Instrument { Id = 2, Sedol = "Sedol2", Name = "Name2", Active = true },
-            new Instrument { Id = 3, Sedol = "Sedol3", Name = "Name3", Active = false },
-            new Instrument { Id = 4, Sedol = "Sedol4", Name = "Name4", Active = true },
-            new Instrument { Id = 5, Sedol = "Sedol5", Name = "Name5", Active = false },
-            new Instrument { Id = 6, Sedol = "", Name = "Name6", Active = true },
-            new Instrument { Id = 7, Sedol = "Sedol7", Name = "Name7", Active = false },
-            new Instrument { Id = 8, Sedol = "Sedol8", Name = "Name8", Active = true },
-            new Instrument { Id = 9, Sedol = "Sedol9", Name = "Name9", Active = false },
-        };
-
-        using var context = TestHelper.GetCanWeFixItDbContext();
-        await context.AddRangeAsync(instruments);
-        _ = await context.SaveChangesAsync();
 
         // act
-        var actual = (await _httpClient.GetFromJsonAsync<Instrument[]>($"/v1/instruments"))
-            ?.ToArray();
+        var response = await _httpClient.GetAsync("/v1/instruments");
+        var actual = await response.Content.ReadFromJsonAsync<Instrument[]>();
 
         // assert
+        Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+
+        Assert.AreEqual(4, actual?.Length);
+
         Assert.AreEqual(actual?[0].Id, 2);
         Assert.AreEqual(actual?[0].Sedol, "Sedol2");
         Assert.AreEqual(actual?[0].Name, "Name2");
         Assert.IsTrue(actual?[0].Active);
+
+        Assert.AreEqual(actual?[1].Id, 4);
+        Assert.AreEqual(actual?[1].Sedol, "Sedol4");
+        Assert.AreEqual(actual?[1].Name, "Name4");
+        Assert.IsTrue(actual?[1].Active);
+
+        Assert.AreEqual(actual?[2].Id, 6);
+        Assert.AreEqual(actual?[2].Sedol, "");
+        Assert.AreEqual(actual?[2].Name, "Name6");
+        Assert.IsTrue(actual?[2].Active);
+
+        Assert.AreEqual(actual?[3].Id, 8);
+        Assert.AreEqual(actual?[3].Sedol, "Sedol8");
+        Assert.AreEqual(actual?[3].Name, "Name8");
+        Assert.IsTrue(actual?[3].Active);
+    }
+
+    [TestMethod]
+    public async Task CanWeFixIt_GetMarketData_ReturnsOKWithCalculatedMarketData()
+    {
+        // arrange
+
+        // act
+        var response = await _httpClient.GetAsync("/v1/marketdata");
+        var actual = await response.Content.ReadFromJsonAsync<MarketDataDto[]>();
+
+        // assert
+        Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+
+        Assert.AreEqual(2, actual?.Length);
+
+        Assert.AreEqual(actual?[0].Id, 2);
+        Assert.AreEqual(actual?[0].DataValue, 2222);
+        Assert.AreEqual(actual?[0].InstrumentId, 2);
+        Assert.IsTrue(actual?[0].Active);
+
+        Assert.AreEqual(actual?[1].Id, 4);
+        Assert.AreEqual(actual?[1].DataValue, 4444);
+        Assert.AreEqual(actual?[1].InstrumentId, 4);
+        Assert.IsTrue(actual?[1].Active);
+    }
+
+    [TestMethod]
+    public async Task CanWeFixIt_GetValuations_ReturnsOKWithCalculatedValuations()
+    {
+        // arrange
+
+        // act
+        var response = await _httpClient.GetAsync("/v1/valuations");
+        var actual = await response.Content.ReadFromJsonAsync<MarketValuation>();
+
+        // assert
+        Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+
+        Assert.AreEqual("DataValueTotal", actual?.Name);
+        Assert.AreEqual(6666, actual?.Total);
     }
 }

@@ -2,5 +2,6 @@ namespace CanWeFixItService.Models;
 
 public class MarketValuation
 {
-    // TODO:
+    public string Name { get => "DataValueTotal"; }
+    public long Total { get; set; }
 }

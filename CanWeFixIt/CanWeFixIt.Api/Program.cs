@@ -77,31 +77,15 @@ app.UseStaticFiles();
 
 app.CreateDbIfNotExists();
 
-//routes
+// routes
 app.MapGet("/v1/instruments", async (ICanWeFixItRepository repository) =>
     (await repository.GetInstrumentsAsync()).ToList());
 
 app.MapGet("/v1/marketdata", async (ICanWeFixItRepository repository) =>
-{
-    var instruments = (await repository.GetInstrumentsAsync());
-    var marketData = (await repository.GetMarketDataAsync());
+    (await repository.GetMarketDataDtosAsync()).ToList());
 
-    // mapping is done here since DTO is a "view-model" and doesn't belong in the repository
-    // for more complex queries, it could be improved for performance
-    // for more complex mappings, use AutoMapper
-    var dto = marketData
-        .Where(md => instruments.Any(i => i.Sedol == md.Sedol))
-        .Select(md => new MarketDataDto
-        {
-            Id = md.Id,
-            DataValue = md.DataValue,
-            InstrumentId = instruments.Single(i => i.Sedol == md.Sedol).Id,
-            Active = md.Active
-        })
-        .ToList();
-
-    return dto;
-});
+app.MapGet("/v1/valuations", async (ICanWeFixItRepository repository) =>
+    await repository.GetMarketValuationAsync());
 
 //    .Produces<TodoItem>(StatusCodes.Status201Created, MediaTypeNames.Application.Json)
 //    .Produces(StatusCodes.Status400BadRequest);

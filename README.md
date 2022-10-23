@@ -9,7 +9,7 @@
 * Change get data active to true; don't we want only active items?
 
 # Decisions
-* Choosing EF to shocase code first skills
+* Choosing EF to showcase code first skills
 * Choosing integration tests over unit tests for end-to-end testing
 
 # TODO
