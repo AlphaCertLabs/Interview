@@ -1,6 +1,5 @@
 using CanWeFixIt.Api.Data;
-using CanWeFixItService;
-using CanWeFixItService.Models;
+using CanWeFixIt.Api.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;

@@ -1,8 +1,8 @@
 ﻿using CanWeFixIt.Api.Data;
-using CanWeFixItService.Models;
+using CanWeFixIt.Api.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace CanWeFixItService;
+namespace CanWeFixIt.Api.Repositories;
 
 public class CanWeFixItRepository : ICanWeFixItRepository
 {

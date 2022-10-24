@@ -1,4 +1,4 @@
-namespace CanWeFixItService.Models;
+namespace CanWeFixIt.Api.Models;
 
 public class MarketValuation
 {

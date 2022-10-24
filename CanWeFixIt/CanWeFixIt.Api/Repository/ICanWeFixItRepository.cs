@@ -1,6 +1,6 @@
-﻿using CanWeFixItService.Models;
+﻿using CanWeFixIt.Api.Models;
 
-namespace CanWeFixItService;
+namespace CanWeFixIt.Api.Repositories;
 
 public interface ICanWeFixItRepository
 {

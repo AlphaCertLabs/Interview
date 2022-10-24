@@ -1,24 +1,23 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace CanWeFixIt.Api.Data
+namespace CanWeFixIt.Api.Data;
+
+public static class DataExtensions
 {
-    public static class DataExtensions
+    public static void CreateDbIfNotExists(this IHost host)
     {
-        public static void CreateDbIfNotExists(this IHost host)
-        {
-            using var scope = host.Services.CreateScope();
+        using var scope = host.Services.CreateScope();
 
-            var services = scope.ServiceProvider;
-            var context = services.GetRequiredService<CanWeFixItDbContext>();
+        var services = scope.ServiceProvider;
+        var context = services.GetRequiredService<CanWeFixItDbContext>();
 
-            context.CreateDbIfNotExists();
-        }
+        context.CreateDbIfNotExists();
+    }
 
-        public static void CreateDbIfNotExists(this CanWeFixItDbContext context)
-        {
-            context.Database.EnsureCreated();
-            DbInitializer.Initialize(context);
-        }
+    public static void CreateDbIfNotExists(this CanWeFixItDbContext context)
+    {
+        context.Database.EnsureCreated();
+        DbInitializer.Initialize(context);
     }
 }

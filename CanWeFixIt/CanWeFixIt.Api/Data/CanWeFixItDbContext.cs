@@ -1,16 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
-using CanWeFixItService.Models;
+﻿using CanWeFixIt.Api.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace CanWeFixIt.Api.Data
+namespace CanWeFixIt.Api.Data;
+
+public class CanWeFixItDbContext : DbContext
 {
-    public class CanWeFixItDbContext : DbContext
+    public CanWeFixItDbContext(DbContextOptions<CanWeFixItDbContext> options)
+        : base(options)
     {
-        public CanWeFixItDbContext(DbContextOptions<CanWeFixItDbContext> options)
-            : base(options)
-        {
-        }
-
-        public DbSet<Instrument> Instruments => Set<Instrument>();
-        public DbSet<MarketData> MarketData => Set<MarketData>();
     }
+
+    public DbSet<Instrument> Instruments => Set<Instrument>();
+    public DbSet<MarketData> MarketData => Set<MarketData>();
 }

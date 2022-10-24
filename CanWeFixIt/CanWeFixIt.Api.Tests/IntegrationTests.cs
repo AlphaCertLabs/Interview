@@ -1,11 +1,10 @@
 using CanWeFixIt.Api.Data;
-using CanWeFixIt.Api.Tests;
-using CanWeFixItService.Models;
+using CanWeFixIt.Api.Models;
 using Microsoft.AspNetCore.Http;
 using System.Net;
 using System.Net.Http.Json;
 
-namespace CanWeFixIt.Tests;
+namespace CanWeFixIt.Api.Tests;
 
 [TestClass]
 public class IntegrationTests
