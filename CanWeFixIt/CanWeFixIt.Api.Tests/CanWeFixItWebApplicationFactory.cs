@@ -16,11 +16,11 @@ internal class CanWeFixItWebApplicationFactory: WebApplicationFactory<global::Pr
         {
             services.AddScoped(sp =>
             {
-                // Replace SQLite with the in memory provider for tests
+                // replace SQLite with the in memory provider for tests
                 return new DbContextOptionsBuilder<CanWeFixItDbContext>()
-                            .UseInMemoryDatabase("Tests", root)
-                            .UseApplicationServiceProvider(sp)
-                            .Options;
+                    .UseInMemoryDatabase("Tests", root)
+                    .UseApplicationServiceProvider(sp)
+                    .Options;
             });
         });
 

@@ -66,7 +66,8 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseHttpsRedirection();
+// this should be enabled for production
+//app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
@@ -84,7 +85,7 @@ app.MapGet("/v1/marketdata", async (ICanWeFixItRepository repository) =>
     (await repository.GetMarketDataDtosAsync()).ToList());
 
 app.MapGet("/v1/valuations", async (ICanWeFixItRepository repository) =>
-    await repository.GetMarketValuationAsync());
+    await repository.GetMarketValuationsAsync());
 
 //    .Produces<TodoItem>(StatusCodes.Status201Created, MediaTypeNames.Application.Json)
 //    .Produces(StatusCodes.Status400BadRequest);
