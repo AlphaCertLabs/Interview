@@ -92,12 +92,14 @@ public class IntegrationTests
 
         // act
         var response = await _httpClient.GetAsync("/v1/valuations");
-        var actual = await response.Content.ReadFromJsonAsync<MarketValuation>();
+        var actual = await response.Content.ReadFromJsonAsync<MarketValuation[]>();
 
         // assert
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
-        Assert.AreEqual("DataValueTotal", actual?.Name);
-        Assert.AreEqual(6666, actual?.Total);
+        Assert.AreEqual(1, actual?.Length);
+
+        Assert.AreEqual("DataValueTotal", actual?[0].Name);
+        Assert.AreEqual(13332, actual?[0].Total);
     }
 }

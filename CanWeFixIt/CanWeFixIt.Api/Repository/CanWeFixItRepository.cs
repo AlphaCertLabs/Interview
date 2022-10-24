@@ -47,9 +47,12 @@ public class CanWeFixItRepository : ICanWeFixItRepository
         return dto;
     }
 
-    public async Task<MarketValuation> GetMarketValuationAsync() =>
-        new MarketValuation
+    public async Task<IEnumerable<MarketValuation>> GetMarketValuationsAsync() =>
+        new[]
         {
-            Total = (await GetMarketDataDtosAsync()).Sum(dto => dto.DataValue).GetValueOrDefault()
+            new MarketValuation
+            {
+                Total = (await GetMarketDataAsync()).Sum(md => md.DataValue).GetValueOrDefault()
+            }
         };
 }
